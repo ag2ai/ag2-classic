@@ -1,7 +1,0 @@
-export const ClientSideComponent = ({ Component, componentProps }) => {
-  if (typeof document === "undefined") {
-    return null;
-  }
-
-  return <Component {...componentProps} />;
-};
