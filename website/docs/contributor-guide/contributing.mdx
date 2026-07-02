@@ -1,113 +1,51 @@
 ---
-title: Contributing to AG2
+title: Contributing to AG2 Classic
 ---
 
-*We believe agent-based systems represent a fundamental shift in how software is built, similar to how Linux transformed operating systems and Kubernetes revolutionized cloud infrastructure*. *Join us in shaping the future of AI governance and automation. Every contribution, no matter how small, helps build a more robust and ethical AI ecosystem.*
+This is **AG2 Classic** — the classic AG2 framework built around `ConversableAgent`, published to PyPI as [`autogen`](https://pypi.org/project/autogen/){.external-link target="_blank"}. It is in **maintenance mode**.
 
-## Why Contribute to AG2?
+!!! important "Building something new? Contribute to AG2 instead"
 
-- **Impact the Future**: 2025 is the year of AI agents. And we believe 2025-2035 will be the decade of AI agents. You can help shape how AI Agents are created, used, deployed, and governed in production environments. And how multiple AI agents collaborate, communicate, and solve complex problems together. Your work will influence how organizations deploy and orchestrate AI agent systems at scale.
+    New features, enhancements, and new integrations belong in the actively developed **AG2** project, not here:
 
-- **Learn & Grow**: Work directly with cutting-edge AI agent technologies and receive mentorship from experienced researchers and developers in the field. Understand how to:
+    - Repository: [github.com/ag2ai/ag2](https://github.com/ag2ai/ag2){.external-link target="_blank"}
+    - Package: [`ag2` on PyPI](https://pypi.org/project/ag2/){.external-link target="_blank"}
+    - Documentation: [docs.ag2.ai](https://docs.ag2.ai/){.external-link target="_blank"}
 
-    - Design sophisticated multi-agent systems
-    - Create novel agent interaction patterns
-    - Build scalable agent architectures
-    - Develop robust testing and evaluation frameworks
-    - Build real-world use cases and applications with AI agents
-    - Participate in research projects to advance the field of AI agents
+## What maintenance mode means
 
-- **Build Your Portfolio**: Gain hands-on experience in a leading open-source AI agent framework project. Your contributions will demonstrate real expertise in one of the most exciting areas of AI development, while earning acknowledgment from the AG2 community.
+AG2 Classic receives **security and critical bug fixes only** — there are no new features. We keep the existing framework installable, safe, and working on supported Python versions, and we correct its documentation. That's it.
 
-- **Join a Community**: Become part of a vibrant ecosystem of developers, researchers, and AI enthusiasts who are passionate about advancing AI agent technology. Share ideas, solve challenges, and grow together with peers who share your interests.
+## What we accept
 
-- **Career Growth**: AG2 is at the forefront of AI agent development. Your open-source contributions here are highly valued by employers in the AI industry, particularly those working on next-generation AI systems and agent-based architectures.
+- **Security fixes** — patches for confirmed vulnerabilities. Report these privately first (see [File a Bug Report](/docs/contributor-guide/file-bug-report) and the repository's `SECURITY.md`).
+- **Critical bug fixes** — corrections to broken behaviour in existing functionality.
+- **Maintenance** — dependency and compatibility updates, build/packaging fixes, and CI upkeep needed to keep the package usable.
+- **Documentation corrections** — fixing inaccurate, broken, or outdated documentation for existing behaviour.
 
-## Resources About AG2
+## What we do not accept
 
-- [AG2 homepage](https://ag2.ai/)
-- [AG2 on Github](https://github.com/ag2ai/ag2)
-- [AG2 community on Discord](https://discord.gg/pAbnFJrkgZ)
-- [AG2 docs](https://docs.ag2.ai)
-- [AG2 on Youtube](https://www.youtube.com/@ag2ai)
-- [AG2 on X](https://x.com/ag2oss)
-- [AG2 on LinkedIn](https://www.linkedin.com/company/ag2ai/)
+- **New features or enhancements** of any kind.
+- **New agents, tools, models, or integrations.**
+- **API changes or refactors** not required to fix a security issue or critical bug.
+- **Behavioural changes** beyond what is needed to restore correct, documented behaviour.
 
-## Step 0: Getting Started
+!!! warning "Feature and enhancement PRs will be closed"
 
-1. Take our [contributor survey](https://jc9pie8gn0f.typeform.com/ag2ai) if you haven't done so
-2. Join our [Discord community](https://discord.gg/pAbnFJrkgZ) and become a verified GitHub developer
-3. Read through this contribution guide
+    Pull requests that add features or enhancements will be closed with a pointer to [`ag2`](https://github.com/ag2ai/ag2){.external-link target="_blank"}. Please open your idea there instead.
 
-If you are new to GitHub, [here](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests) is a detailed help source on getting involved with development on GitHub.
+## How to contribute a fix
 
-## Step 1: Explore Contribution Opportunities
+1. **Open an issue first** for anything beyond a trivial fix, so a maintainer can confirm it's in scope for maintenance mode before you invest time. For security vulnerabilities, use the private reporting process in the repository's `SECURITY.md` — do **not** open a public issue.
+2. **Set up your environment** — see [Setting up your environment](/docs/contributor-guide/setup-development-environment).
+3. **Keep the change focused** — a maintenance PR should fix one thing and touch the minimum surface area needed.
+4. **Add or update tests** covering the fix where relevant — see [Tests](/docs/contributor-guide/tests).
+5. **Run the checks** — install and run [pre-commit](/docs/contributor-guide/pre-commit) hooks and make sure the full test suite passes.
+6. **Open your pull request** against [github.com/ag2ai/ag2classic](https://github.com/ag2ai/ag2classic){.external-link target="_blank"} and fill in the PR template, indicating the type of change.
 
-### Find Your Path
+## License headers
 
-We believe everyone has something valuable to contribute. Here's how you can get started:
-
-**For New Contributors:**
-
-- Begin with our curated [good first issues](https://github.com/ag2ai/ag2/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22)
-- Perfect for those new to open source or AG2
-- Experienced maintainers and contributors are ready to guide you through your first PR
-
-**For Experienced Contributors:**
-
-- Dive into our [roadmap issues](https://github.com/ag2ai/ag2/issues?q=is%3Aissue%20state%3Aopen%20label%3Aroadmap) to tackle complex challenges
-- Shape core features and architectural decisions
-- Mentor newcomers and help build our community
-- Propose innovative improvements to AG2
-
-### Ways to Contribute
-
-Your skills can make a difference in many ways:
-
-- Submit Pull Requests (PRs) to improve our codebase
-- Review [existing PRs](https://github.com/ag2ai/ag2/pulls) and help maintain code quality
-- Share your knowledge in our [AG2 community Discord](https://discord.gg/pAbnFJrkgZ) channels
-- Enrich our [documentation](https://docs.ag2.ai) to help others learn
-- Add cool examples and use cases
-
-  - Get inspired by existing [notebook examples](/docs/use-cases/notebooks/Notebooks) and [video demos](https://www.youtube.com/@ag2ai)
-- Report bugs and suggest feature improvements:
-
-  - [Bug report](https://github.com/ag2ai/ag2/issues/new?template=bug_report.yml)
-  - [Feature request](https://github.com/ag2ai/ag2/issues/new?template=feature_request.yml)
-
-## Step 2: Join Contributor Scrum Meetings
-
-Be part of our vibrant community through regular collaboration:
-
-- Daily meetings with core contributors
-- Tuesday/Friday scrum meetings with community contributors
-- Regular technical discussions and knowledge sharing sessions
-- Opportunities to present your work and get feedback
-
-**Note:** To ensure productive meetings and meaningful progress, we ask that you commit to contributing at least 2 hours per week before joining the scrum meetings.
-
-## Recognition Program
-
-We value our contributors and celebrate their achievements through:
-
-- Regular contributor spotlights on our blog
-- Acknowledgment in release notes
-- Opportunities to become core maintainers
-- Special access to AG2 community events and workshops
-
-## Becoming a Reviewer
-
-There is currently no formal reviewer solicitation process. Current reviewers identify reviewers from active contributors. If you are willing to become a reviewer, you are welcome to let us know on Discord.
-
-## Contact Maintainers
-
-The project is currently maintained by a [dynamic group of volunteers](https://github.com/ag2ai/ag2/blob/main/MAINTAINERS.md) from several organizations. Contact project administrators Chi Wang and Qingyun Wu via support@ag2.ai if you are interested in becoming a maintainer.
-
-
-## License Headers
-
-To maintain proper licensing and copyright notices, please include the following header at the top of each new source code file you create, regardless of the programming language:
+Include the following header at the top of each new source file you create:
 
 ```python
 # Copyright (c) 2023 - 2026, AG2ai, Inc., AG2ai open-source projects maintainers and core contributors
@@ -115,7 +53,7 @@ To maintain proper licensing and copyright notices, please include the following
 # SPDX-License-Identifier: Apache-2.0
 ```
 
-For files that contain or are derived from the original MIT-licensed code from https://github.com/microsoft/autogen, please use this extended header:
+For files that contain or are derived from the original MIT-licensed code from [microsoft/autogen](https://github.com/microsoft/autogen){.external-link target="_blank"}, use this extended header:
 
 ```python
 # Copyright (c) 2023 - 2026, AG2ai, Inc., AG2ai open-source projects maintainers and core contributors
@@ -126,6 +64,8 @@ For files that contain or are derived from the original MIT-licensed code from h
 # SPDX-License-Identifier: MIT
 ```
 
-Please ensure you update the year range as appropriate. If you're unsure which header to use or have any questions about licensing, please don't hesitate to ask in your pull request or reach out to the maintainers.
+Please update the year range as appropriate. If you're unsure which header to use, ask in your pull request.
 
-Ready to begin? Your journey with AG2 starts now. Every line of code, documentation edit, or helpful comment makes a difference. Join us in building the future of AI Agents!
+## Questions
+
+For questions, discussion, or help getting started with the actively developed version, join the [AG2 community on Discord](https://discord.gg/pAbnFJrkgZ){.external-link target="_blank"}.

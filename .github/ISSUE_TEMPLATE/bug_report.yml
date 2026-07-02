@@ -1,9 +1,17 @@
 name: Bug Report
-description: File a bug report
+description: Report a bug in AG2 Classic (maintenance mode)
 title: "[Bug]: "
 labels: ["bug"]
 
 body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ **This is AG2 Classic (the `autogen` package), in maintenance mode.**
+
+        We only fix **security issues** and **critical bugs** in existing behaviour. We do **not** add new features or enhancements here — please open those against the actively developed [AG2 repo](https://github.com/ag2ai/ag2).
+
+        For a **security vulnerability**, do **not** file a public issue — follow the private process in [SECURITY.md](https://github.com/ag2ai/ag2classic/blob/main/.github/SECURITY.md).
   - type: textarea
     id: description
     attributes:
