@@ -44,7 +44,7 @@ AG2 was evolved from AutoGen. Fully open-sourced. We invite collaborators from a
 </p>
 
 > [!IMPORTANT]
-> **This is the classic AutoGen repository** — the original `autogen` framework built around `ConversableAgent`. It is published to PyPI as the [`autogen`](https://pypi.org/project/autogen/) package and is now in **maintenance mode**: it receives **security and critical bug fixes only**, with no new features.
+> **This is the AG2 Classic repository** (originally AutoGen) — the classic AG2 framework built around `ConversableAgent`. It is published to PyPI as the [`autogen`](https://pypi.org/project/autogen/) package and is now in **maintenance mode**: it receives **security and critical bug fixes only**, with no new features.
 >
 > **AG2 is the current, actively developed version.** Find it at [github.com/ag2ai/ag2](https://github.com/ag2ai/ag2) (PyPI: [`ag2`](https://pypi.org/project/ag2/)), with documentation at [docs.ag2.ai](https://docs.ag2.ai/).
 
@@ -82,9 +82,9 @@ For a step-by-step walk through of AG2 concepts and code, see [Basic Concepts](h
 
 ### Installation
 
-This repository is the classic AutoGen, published as the [`autogen`](https://pypi.org/project/autogen/) package on PyPI (in maintenance mode — security and critical fixes only). For the current, actively developed version, install [`ag2`](https://pypi.org/project/ag2/) instead.
+This repository is AG2 Classic (originally AutoGen), published as the [`autogen`](https://pypi.org/project/autogen/) package on PyPI (in maintenance mode — security and critical fixes only). For the current, actively developed version, install [`ag2`](https://pypi.org/project/ag2/) instead.
 
-Classic AutoGen requires **Python version >= 3.10**.
+AG2 Classic requires **Python version >= 3.10**.
 
 **Windows/Linux:**
 ```bash

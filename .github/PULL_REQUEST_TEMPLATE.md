@@ -1,18 +1,33 @@
-<!-- Thank you for your contribution! Please review https://docs.ag2.ai/latest/docs/contributor-guide/contributing before opening a pull request. -->
+<!--
+⚠️ This is AG2 CLASSIC (the `autogen` package), which is in MAINTENANCE MODE.
+We only accept security fixes, critical bug fixes, maintenance (dependency/compat/build/CI),
+and documentation corrections. New features and enhancements are NOT accepted here — please
+consider enhancements for the actively developed AG2 repo instead: https://github.com/ag2ai/ag2
 
-<!-- Please add a reviewer to the assignee section when you create a PR. If you don't have the access to it, we will shortly find a reviewer and assign them to your PR. -->
+Please review CONTRIBUTING.md before opening a pull request.
+-->
+
+## Type of change
+
+<!-- This repository is in maintenance mode. Check the ONE box that applies. PRs that don't fit these categories will be closed with a pointer to https://github.com/ag2ai/ag2 -->
+
+- [ ] 🔒 Security fix
+- [ ] 🐛 Critical bug fix
+- [ ] 🔧 Maintenance (dependency / compatibility / build / CI)
+- [ ] 📝 Documentation correction
 
 ## Why are these changes needed?
 
-<!-- Please give a short summary of the change and the problem this solves. -->
+<!-- Give a short summary of the change and the problem this solves. For a bug/security fix, describe the incorrect behaviour being corrected. -->
 
 ## Related issue number
 
-<!-- For example: "Closes #1234" -->
+<!-- For example: "Closes #1234". For anything beyond a trivial fix, please link an issue that a maintainer has confirmed is in scope. -->
 
 ## Checks
 
-- [ ] I've included any doc changes needed for https://docs.ag2.ai/. See https://docs.ag2.ai/latest/docs/contributor-guide/documentation/ to build and test documentation locally.
+- [ ] This PR only fixes existing behaviour (security, critical bug, maintenance, or docs) — it does **not** add a new feature or enhancement.
+- [ ] I've kept the change focused and minimal.
 - [ ] I've added tests (if relevant) corresponding to the changes introduced in this PR.
 - [ ] I've made sure all auto checks have passed.
 
