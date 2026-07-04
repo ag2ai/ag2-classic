@@ -27,7 +27,7 @@ Rather than generating features or enhancements for this, AG2 Classic, repositor
 ## Before you open a pull request
 
 1. **Open an issue first** for anything beyond a trivial fix, so a maintainer can confirm it's in scope for maintenance mode before you invest time.
-   - [Report a bug](https://github.com/ag2ai/ag2classic/issues/new?template=bug_report.yml)
+   - [Report a bug](https://github.com/ag2ai/ag2-classic/issues/new?template=bug_report.yml)
    - Report a security vulnerability privately via the process in [SECURITY.md](.github/SECURITY.md) — **do not** open a public issue.
 2. **Keep the change focused.** A maintenance PR should fix one thing and touch the minimum surface area needed.
 3. **Add or update tests** covering the fix where relevant.
