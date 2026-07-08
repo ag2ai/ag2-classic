@@ -684,6 +684,9 @@ Please provide your rating along with a brief explanation of your assessment.
         assert all(node.parent == nodes[0].parent for node in nodes), "All nodes must have the same parent."
         assert nodes[0].parent is not None, "Parent node must not be None."
 
+        if all(node.rating_details for node in nodes):
+            return [node.value for node in nodes]
+
         # Update Grader's system message
         message = f"""You will be provided a thinking trajectory and a list of options for the next step.
 Please rate the thinking trajectory created by each option on a scale of 1 to {self._rating_scale}, where 1 is the worst and {self._rating_scale} is the best.
@@ -755,7 +758,7 @@ Rating: <rating>
 
         # if the response wasn't of the expected format, return default rewards
         if len(ratings) != len(nodes):
-            return [0.0] * len(nodes)
+            return [node.value if node.rating_details else 0.0 for node in nodes]
 
         rewards = []
         # Get rewards and assign rating details to corresponding nodes
