@@ -495,6 +495,55 @@ def test_rate_batch_nodes_invalid_response(mock_credentials: Credentials) -> Non
         assert rewards == [0.0, 0.0]
 
 
+def test_rate_node_caches_zero_value(mock_credentials: Credentials) -> None:
+    """A node already graded to 0.0 (e.g. the worst rating of 1) must hit the
+    rating cache and not call the grader again.
+
+    The cache sentinel is `rating_details`; keying the early return on
+    `value > 0` skipped the cache for any legitimately zero-valued node and
+    re-invoked the grader.
+    """
+    node = ThinkNode(content="The capital of France is Paris.")
+    # State of a node that was already graded with the worst rating (1 -> 0.0).
+    node.rating_details = "Rating: 1 - requires a survey, not executable."
+    node.value = 0.0
+
+    with patch("autogen.agentchat.conversable_agent.ConversableAgent.generate_oai_reply") as mock_oai_reply:
+        agent = ReasoningAgent(
+            "test_agent",
+            llm_config=cast(Any, False),
+        )
+
+        reward = agent.rate_node(node)
+
+    assert reward == 0.0
+    mock_oai_reply.assert_not_called()
+
+
+def test_rate_batch_nodes_caches_zero_value(mock_credentials: Credentials) -> None:
+    """Batch grading must preserve cached zero-valued nodes without calling the grader."""
+    parent = ThinkNode(content=TEST_QUESTION)
+    think_node1 = ThinkNode(content="We can conduct a survey to find out the capital of France.", parent=parent)
+    think_node2 = ThinkNode(content="The capital of France is Paris.", parent=parent)
+
+    think_node1.rating_details = "Option 1: Suggests a non-executable approach.\nRating: 1"
+    think_node1.value = 0.0
+    think_node2.rating_details = "Option 2: Answers the question correctly.\nRating: 10"
+    think_node2.value = 1.0
+
+    with patch("autogen.agentchat.conversable_agent.ConversableAgent.generate_oai_reply") as mock_oai_reply:
+        agent = ReasoningAgent(
+            "test_agent",
+            llm_config=cast(Any, False),
+            reason_config={"batch_grading": True},
+        )
+
+        rewards = agent.rate_batch_nodes([think_node1, think_node2])
+
+    assert rewards == [0.0, 1.0]
+    mock_oai_reply.assert_not_called()
+
+
 def test_execute_node_with_cached_output(mock_credentials: Credentials, think_node: ThinkNode) -> None:
     """
     Test that execute_node returns the cached output if it exists.

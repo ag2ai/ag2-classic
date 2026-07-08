@@ -4,7 +4,7 @@ contact_links:
     url: https://github.com/ag2ai/ag2/issues/new?template=feature_request.yml
     about: AG2 Classic is in maintenance mode — new features and enhancements are not accepted here. Please open your request against the actively developed AG2 repo.
   - name: 🔒 Report a security vulnerability
-    url: https://github.com/ag2ai/ag2classic/security/advisories/new
+    url: https://github.com/ag2ai/ag2-classic/security/advisories/new
     about: Please report vulnerabilities privately. Do not open a public issue. See SECURITY.md for details.
   - name: 💬 Questions & community discussion
     url: https://discord.gg/pAbnFJrkgZ
