@@ -2,9 +2,29 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+import json
+from pathlib import Path
+from typing import Any
+from unittest.mock import patch
+
 import pytest
 
 from autogen.agents.experimental.a2ui.schema_manager import A2UISchemaManager
+
+
+def _cp1252_default_open(
+    file: Any,
+    mode: str = "r",
+    buffering: int = -1,
+    encoding: str | None = None,
+    errors: str | None = None,
+    newline: str | None = None,
+    closefd: bool = True,
+    opener: Any | None = None,
+) -> Any:
+    if "b" not in mode and encoding is None:
+        encoding = "cp1252"
+    return Path(file).open(mode=mode, buffering=buffering, encoding=encoding, errors=errors, newline=newline)
 
 
 class TestA2UISchemaManager:
@@ -98,3 +118,29 @@ class TestA2UISchemaManager:
         prompt = manager.generate_prompt_section(response_delimiter="<<<A2UI>>>")
         assert "<<<A2UI>>>" in prompt
         assert "---a2ui_JSON---" not in prompt
+
+    def test_custom_catalog_file_load_handles_non_utf_default_encoding(self, tmp_path: Path) -> None:
+        # Regression for the UTF-8 encoding pins on the open() calls inside
+        # A2UISchemaManager. This simulates platforms whose default
+        # locale.getencoding() is not UTF-8, notably Windows cp1252 / cp932.
+        custom_catalog = {
+            "$id": "https://例.com/catalogue.json",
+            "components": {
+                "Bouton": {
+                    "type": "object",
+                    "description": "Composant interactif — étiquette: 智能按钮",
+                }
+            },
+        }
+        catalog_path = tmp_path / "catalogue.json"
+        catalog_path.write_text(json.dumps(custom_catalog, ensure_ascii=False), encoding="utf-8")
+
+        with patch("builtins.open", side_effect=_cp1252_default_open):
+            manager = A2UISchemaManager(custom_catalog=str(catalog_path))
+
+        loaded = manager.custom_catalog_schema
+        assert loaded is not None
+        assert loaded["$id"] == "https://例.com/catalogue.json"
+        bouton = loaded["components"]["Bouton"]
+        assert bouton["description"] == "Composant interactif — étiquette: 智能按钮"
+        assert manager.catalog_id == "https://例.com/catalogue.json"
