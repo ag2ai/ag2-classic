@@ -1,0 +1,32 @@
+name: Claude inline trigger
+
+on:
+  pull_request_review_comment:
+    types: [created]
+  pull_request_review:
+    types: [submitted]
+
+permissions: {}
+
+jobs:
+  record:
+    if: |
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record trigger
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          TRIGGER_ID: ${{ github.event.comment.id || github.event.review.id }}
+        run: |
+          mkdir trigger
+          jq -n --arg event "$EVENT_NAME" --arg pr "$PR_NUMBER" --arg id "$TRIGGER_ID" \
+            '{event: $event, pr: $pr, id: $id}' > trigger/trigger.json
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: claude-trigger
+          path: trigger/trigger.json
+          retention-days: 1
