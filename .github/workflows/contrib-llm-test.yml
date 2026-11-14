@@ -81,7 +81,6 @@ jobs:
           files: ./coverage.xml
           flags: teachable, ${{ matrix.python-version }}, ${{ matrix.os }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   AgentBuilder:
     strategy:
@@ -148,7 +147,6 @@ jobs:
           files: ./coverage.xml
           flags: autobuild, captainagent, ${{ matrix.python-version }}, ${{ matrix.os }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   # https://github.com/marketplace/actions/alls-green#why
   check-contrib-test-llm: # This job does nothing and is only used for the branch protection

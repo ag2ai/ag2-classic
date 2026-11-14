@@ -3,13 +3,14 @@ rules:
     ignore:
       - mkdocs-check-broken-links.yml
       - pr_labeler.yaml
+      # pull_request_target is deliberate: the review runs main's copy of the workflow
+      # and never checks out PR code (see the comment in the workflow).
+      - claude-code-review.yml
   dependabot-cooldown:
     ignore:
       - dependabot.yml
   secrets-outside-env:
     ignore:
-      - claude-code-review.yml
-      - claude.yml
       - contrib-test.yml
       - contrib-graph-rag-tests.yml
       - contrib-llm-test.yml

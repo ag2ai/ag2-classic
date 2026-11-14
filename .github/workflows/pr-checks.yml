@@ -118,7 +118,6 @@ jobs:
           files: ./coverage.xml
           flags: core-without-llm, ubuntu-latest, 3.11
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   docs-paths-filter:
     permissions:

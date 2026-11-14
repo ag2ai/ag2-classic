@@ -67,7 +67,6 @@ jobs:
           files: ./coverage.xml
           flags: retrievechat, retrievechat-qdrant, ${{ matrix.os }}, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   RetrieveChatTest-Ubuntu:
     runs-on: ubuntu-latest
@@ -187,7 +186,6 @@ jobs:
           files: ./coverage.xml
           flags: retrievechat, retrievechat-qdrant, retrievechat-pgvector, retrievechat-mongodb, retrievechat-couchbase, ubuntu-latest, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
   TeachableAgent:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -227,7 +225,6 @@ jobs:
           files: ./coverage.xml
           flags: teachable, ${{ matrix.os }}, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   WebSurfer:
     runs-on: ${{ matrix.os }}
@@ -268,7 +265,6 @@ jobs:
           files: ./coverage.xml
           flags: websurfer, ${{ matrix.os }}, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   LMMTest:
     runs-on: ${{ matrix.os }}
@@ -310,7 +306,6 @@ jobs:
           files: ./coverage.xml
           flags: lmm, ${{ matrix.os }}, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   GeminiTest:
     runs-on: ${{ matrix.os }}
@@ -352,7 +347,6 @@ jobs:
           files: ./coverage.xml
           flags: gemini, ${{ matrix.os }}, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   TransformMessages:
     runs-on: ${{ matrix.os }}
@@ -393,7 +387,6 @@ jobs:
           files: ./coverage.xml
           flags: long-context, ${{ matrix.os }}, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   LlamaIndexAgent:
     runs-on: ${{ matrix.os }}
@@ -429,7 +422,6 @@ jobs:
           files: ./coverage.xml
           flags: llama-index-agent, ${{ matrix.os }}, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   AnthropicTest:
     runs-on: ${{ matrix.os }}
@@ -473,7 +465,6 @@ jobs:
           files: ./coverage.xml
           flags: anthropic, ${{ matrix.os }}, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   CerebrasTest:
     runs-on: ${{ matrix.os }}
@@ -515,7 +506,6 @@ jobs:
           files: ./coverage.xml
           flags: cerebras, ${{ matrix.os }}, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   MistralTest:
     runs-on: ${{ matrix.os }}
@@ -557,7 +547,6 @@ jobs:
           files: ./coverage.xml
           flags: mistral, ${{ matrix.os }}, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   TogetherTest:
     runs-on: ${{ matrix.os }}
@@ -599,7 +588,6 @@ jobs:
           files: ./coverage.xml
           flags: together, ${{ matrix.os }}, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   GroqTest:
     runs-on: ${{ matrix.os }}
@@ -641,7 +629,6 @@ jobs:
           files: ./coverage.xml
           flags: groq, ${{ matrix.os }}, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   CohereTest:
     runs-on: ${{ matrix.os }}
@@ -681,7 +668,6 @@ jobs:
           files: ./coverage.xml
           flags: cohere, ${{ matrix.os }}, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   OllamaTest:
     runs-on: ${{ matrix.os }}
@@ -723,7 +709,6 @@ jobs:
           files: ./coverage.xml
           flags: ollama, ${{ matrix.os }}, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   BedrockTest:
     runs-on: ${{ matrix.os }}
@@ -765,4 +750,3 @@ jobs:
           files: ./coverage.xml
           flags: bedrock, ${{ matrix.os }}, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
