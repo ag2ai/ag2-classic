@@ -6,6 +6,10 @@ rules:
       # pull_request_target is deliberate: the review runs main's copy of the workflow
       # and never checks out PR code (see the comment in the workflow).
       - claude-code-review.yml
+      # issue_comment is how @claude is invoked. claude-code-action only runs for
+      # commenters with write access, the API key comes from the main-only openai1
+      # environment, and the PR's .claude/ and .mcp.json are removed before Claude runs.
+      - claude.yml
   dependabot-cooldown:
     ignore:
       - dependabot.yml
