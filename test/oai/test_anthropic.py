@@ -556,6 +556,7 @@ def test_supports_native_structured_outputs():
 
     # Sonnet 4.5 models should be supported
     assert supports_native_structured_outputs("claude-sonnet-4-5")
+    assert supports_native_structured_outputs("claude-sonnet-4-6")
     assert supports_native_structured_outputs("claude-3-5-sonnet-20241022")
     assert supports_native_structured_outputs("claude-3-7-sonnet-20250219")
 

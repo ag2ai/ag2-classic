@@ -211,16 +211,11 @@ def get_credentials_from_env_vars(
     anthropic_config = build_config_from_env(
         api_type="anthropic",
         env_var_name="ANTHROPIC_API_KEY",
-        model="claude-sonnet-4-5-20250929",
+        model="claude-sonnet-4-6",
     )
     if anthropic_config:
         config_list.append({**anthropic_config, "tags": ["anthropic-claude-sonnet"]})
-        config_list.append({
-            **anthropic_config,
-            "model": "claude-sonnet-4-5-20250929",
-            "tags": ["anthropic-claude-sonnet"],
-        })
-        config_list.append({**anthropic_config, "model": "claude-3-opus-20240229", "tags": ["anthropic-claude-opus"]})
+        config_list.append({**anthropic_config, "model": "claude-opus-4-6", "tags": ["anthropic-claude-opus"]})
 
     # DeepSeek configuration
     deepseek_config = build_config_from_env(
@@ -258,7 +253,7 @@ def get_credentials_from_env_vars(
     if os.getenv("AWS_ACCESS_KEY_ID") and os.getenv("AWS_SECRET_ACCESS_KEY"):
         bedrock_config = {
             "api_key": "bedrock",  # Placeholder, uses AWS credentials
-            "model": "anthropic.claude-3-sonnet-20240229-v1:0",
+            "model": "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
             "api_type": "bedrock",
         }
         config_list.append(bedrock_config)
