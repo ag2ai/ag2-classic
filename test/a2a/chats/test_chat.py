@@ -6,7 +6,6 @@ import asyncio
 from unittest.mock import MagicMock
 
 import pytest
-from freezegun import freeze_time
 from httpx import ASGITransport
 
 from autogen import ConversableAgent
@@ -87,7 +86,6 @@ async def test_conversation(remote_agent: ConversableAgent, a2a_client: HttpxCli
 
 
 @pytest.mark.asyncio()
-@freeze_time(auto_tick_seconds=5)
 async def test_long_living_agent_task(
     remote_agent: ConversableAgent, a2a_client: HttpxClientFactory, mock: MagicMock
 ) -> None:
@@ -98,7 +96,7 @@ async def test_long_living_agent_task(
     original_message_generator = remote_agent.a_generate_oai_reply
 
     async def slow_message(*args, **kwargs):
-        await asyncio.sleep(10)
+        await asyncio.sleep(0.5)
         mock()
         return await original_message_generator(*args, **kwargs)
 
