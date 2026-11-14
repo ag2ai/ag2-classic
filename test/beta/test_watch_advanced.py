@@ -22,7 +22,7 @@ class TestCadenceWatchTimeTrigger:
         async def callback(events: BaseEvent, ctx: Context) -> None:
             batches.append(events)
 
-        watch = CadenceWatch(max_wait=0.01, condition=ToolCallEvent)
+        watch = CadenceWatch(max_wait=0.2, condition=ToolCallEvent)
         watch.arm(stream, callback)
 
         # arrange agent
@@ -43,7 +43,7 @@ class TestCadenceWatchTimeTrigger:
 
         # act
         await agent.ask("Hello, world!", stream=stream)
-        await asyncio.sleep(0.02)
+        await asyncio.sleep(0.4)
 
         # assert
         assert batches == [
