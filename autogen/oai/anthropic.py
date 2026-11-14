@@ -15,7 +15,7 @@ import autogen
 
 config_list = [
     {
-        "model": "claude-3-sonnet-20240229",
+        "model": "claude-sonnet-4-6",
         "api_key": os.getenv("ANTHROPIC_API_KEY"),
         "api_type": "anthropic",
     }
@@ -34,7 +34,7 @@ import autogen
 
 config_list = [
     {
-        "model": "anthropic.claude-3-5-sonnet-20240620-v1:0",
+        "model": "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
         "aws_access_key":<accessKey>,
         "aws_secret_key":<secretKey>,
         "aws_session_token":<sessionTok>,
@@ -56,7 +56,7 @@ Install the `anthropic` package by running `pip install anthropic[vertex]`.
 import autogen
 config_list = [
     {
-        "model": "claude-3-5-sonnet-20240620-v1:0",
+        "model": "claude-sonnet-4-5@20250929",
         "gcp_project_id": "dummy_project_id",
         "gcp_region": "us-west-2",
         "gcp_auth_token": "dummy_auth_token",
@@ -127,6 +127,7 @@ ANTHROPIC_PRICING_1k = {
     "claude-sonnet-4-20250514": (0.0003, 0.0015),
     "claude-sonnet-4-5": (0.0003, 0.0015),
     "claude-sonnet-4-5-20250929": (0.0003, 0.0015),
+    "claude-sonnet-4-6": (0.003, 0.015),
     "claude-opus-4": (0.015, 0.075),
     "claude-opus-4-1": (0.015, 0.075),
     "claude-opus-4-5": (0.0005, 0.0025),
@@ -139,6 +140,7 @@ ANTHROPIC_PRICING_1k = {
 STRUCTURED_OUTPUT_MODELS = {
     "claude-sonnet-4-5",
     "claude-sonnet-4-5-20250929",  # Versioned Claude Sonnet 4.5
+    "claude-sonnet-4-6",
     "claude-3-5-sonnet-20241022",
     "claude-3-7-sonnet-20250219",
     "claude-opus-4-1",
@@ -162,7 +164,7 @@ def supports_native_structured_outputs(model: str) -> bool:
         True if the model supports native structured outputs, False otherwise.
 
     Supported models:
-        - Claude Sonnet 4.5+ (claude-sonnet-4-5, claude-sonnet-4-5-20250929, claude-3-5-sonnet-20241022+)
+        - Claude Sonnet 4.5+ (claude-sonnet-4-5, claude-sonnet-4-5-20250929, claude-sonnet-4-6, claude-3-5-sonnet-20241022+)
         - Claude Sonnet 3.7+ (claude-3-7-sonnet-20250219+)
         - Claude Opus 4.1+ (claude-opus-4-1+)
         - Claude Haiku 4.5+ (claude-haiku-4-5, claude-haiku-4-5-20251001)
@@ -190,7 +192,7 @@ def supports_native_structured_outputs(model: str) -> bool:
         return True
 
     # Support future Sonnet 4.5+ versions (NOT Sonnet 4.0)
-    if model.startswith("claude-sonnet-4-5"):
+    if model.startswith(("claude-sonnet-4-5", "claude-sonnet-4-6")):
         return True
 
     # Support Haiku 4.5+ versions

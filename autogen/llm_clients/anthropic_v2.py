@@ -134,7 +134,7 @@ class AnthropicV2Client(ModelClient):
 
         # Get rich response with thinking
         response = client.create({
-            "model": "claude-3-5-sonnet-20241022",
+            "model": "claude-sonnet-4-6",
             "messages": [{"role": "user", "content": "Explain quantum computing"}]
         })
 
@@ -204,7 +204,7 @@ class AnthropicV2Client(ModelClient):
 
         Args:
             params: Request parameters including:
-                - model: Model name (e.g., "claude-3-5-sonnet-20241022")
+                - model: Model name (e.g., "claude-sonnet-4-6")
                 - messages: List of message dicts
                 - temperature: Optional temperature
                 - max_tokens: Optional max completion tokens

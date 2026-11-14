@@ -55,7 +55,7 @@ def anthropic_v2_llm_config(credentials_anthropic_claude_sonnet: Credentials) ->
     return {
         "config_list": [
             {
-                "model": "claude-sonnet-4-5",
+                "model": "claude-sonnet-4-6",
                 "api_key": credentials_anthropic_claude_sonnet.api_key,
                 "api_type": "anthropic_v2",
             }
@@ -78,7 +78,7 @@ def anthropic_v2_llm_config_vision(credentials_anthropic_claude_sonnet: Credenti
         "config_list": [
             {
                 "api_type": "anthropic_v2",
-                "model": "claude-sonnet-4-5",  # Vision-capable model
+                "model": "claude-sonnet-4-6",  # Vision-capable model
                 "api_key": credentials_anthropic_claude_sonnet.api_key,
             }
         ],
