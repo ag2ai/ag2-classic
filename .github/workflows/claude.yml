@@ -74,6 +74,8 @@ jobs:
         uses: anthropics/claude-code-action@4d7e1f0cd85743fdc93b1c8040ab54395da024e2 # v1.0.149
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Pin the model: left unset, the action picks a default the API key may not have access to.
+          claude_args: '--model claude-sonnet-5-5'
 
           # This is an optional setting that allows Claude to read CI results on PRs
           additional_permissions: |
