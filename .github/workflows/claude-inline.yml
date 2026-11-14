@@ -1,0 +1,125 @@
+name: Claude inline
+
+on:
+  workflow_run:
+    workflows: ["Claude inline trigger"]
+    types: [completed]
+
+permissions: {}
+
+jobs:
+  verify:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      pull-requests: read
+    outputs:
+      event: ${{ steps.verify.outputs.event }}
+      pr: ${{ steps.verify.outputs.pr }}
+      id: ${{ steps.verify.outputs.id }}
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: claude-trigger
+          path: trigger
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
+      - name: Verify trigger
+        id: verify
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          EVENT=$(jq -r .event trigger/trigger.json)
+          PR=$(jq -r .pr trigger/trigger.json)
+          ID=$(jq -r .id trigger/trigger.json)
+          if ! [[ "$PR" =~ ^[0-9]+$ && "$ID" =~ ^[0-9]+$ ]]; then
+            echo "::error::Invalid trigger"
+            exit 1
+          fi
+
+          case "$EVENT" in
+            pull_request_review_comment) DATA=$(gh api "repos/$REPO/pulls/comments/$ID") ;;
+            pull_request_review) DATA=$(gh api "repos/$REPO/pulls/$PR/reviews/$ID") ;;
+            *) echo "::error::Invalid trigger"; exit 1 ;;
+          esac
+
+          DATA_PR=$(jq -r '.pull_request_url | split("/") | last' <<< "$DATA")
+          AUTHOR=$(jq -r .user.login <<< "$DATA")
+          if [ "$DATA_PR" != "$PR" ] || ! jq -e '.body | contains("@claude")' <<< "$DATA" > /dev/null; then
+            echo "::error::Trigger does not match an @claude comment on PR #$PR"
+            exit 1
+          fi
+
+          PERMISSION=$(gh api "repos/$REPO/collaborators/$AUTHOR/permission" --jq .permission)
+          if [ "$PERMISSION" != "admin" ] && [ "$PERMISSION" != "write" ]; then
+            echo "::error::$AUTHOR does not have write access"
+            exit 1
+          fi
+
+          {
+            echo "event=$EVENT"
+            echo "pr=$PR"
+            echo "id=$ID"
+          } >> "$GITHUB_OUTPUT"
+
+  claude:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: openai1
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      reply: ${{ fromJSON(steps.claude.outputs.structured_output).reply }}
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Run Claude
+        id: claude
+        uses: anthropics/claude-code-action@4d7e1f0cd85743fdc93b1c8040ab54395da024e2 # v1.0.149
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ github.token }}
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ needs.verify.outputs.pr }}
+            TRIGGER: ${{ needs.verify.outputs.event }} ${{ needs.verify.outputs.id }}
+
+            A maintainer mentioned @claude in a pull request review. The working directory is the base branch, not the PR.
+
+            1. Read the trigger:
+               - pull_request_review_comment: `gh api repos/${{ github.repository }}/pulls/comments/<id>`, then the rest of its thread from `gh api repos/${{ github.repository }}/pulls/<pr>/comments` (comments whose `in_reply_to_id` is the thread's first comment).
+               - pull_request_review: `gh api repos/${{ github.repository }}/pulls/<pr>/reviews/<id>`.
+            2. Read the change with `gh pr diff` and `gh pr view`. For a file at the PR's head, use `gh api repos/${{ github.repository }}/contents/<path>?ref=<head sha>`.
+            3. Answer the request in the comment. You cannot change code or post comments; return your answer as `reply` and it will be posted for you.
+          claude_args: >-
+            --model claude-sonnet-5-5
+            --allowed-tools "Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh api repos/ag2ai/ag2-classic/pulls/:*),Bash(gh api repos/ag2ai/ag2-classic/contents/:*)"
+            --json-schema '{"type":"object","properties":{"reply":{"type":"string"}},"required":["reply"]}'
+
+  reply:
+    needs: [verify, claude]
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Post reply
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          EVENT: ${{ needs.verify.outputs.event }}
+          PR: ${{ needs.verify.outputs.pr }}
+          ID: ${{ needs.verify.outputs.id }}
+          REPLY: ${{ needs.claude.outputs.reply }}
+        run: |
+          if [ "$EVENT" = "pull_request_review_comment" ]; then
+            gh api "repos/$REPO/pulls/$PR/comments/$ID/replies" -f body="$REPLY"
+          else
+            gh pr comment "$PR" -R "$REPO" --body "$REPLY"
+          fi

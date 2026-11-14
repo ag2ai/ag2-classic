@@ -10,6 +10,7 @@ rules:
       # commenters with write access, the API key comes from the main-only openai1
       # environment, and the PR's .claude/ and .mcp.json are removed before Claude runs.
       - claude.yml
+      - claude-inline.yml
   dependabot-cooldown:
     ignore:
       - dependabot.yml
