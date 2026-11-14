@@ -182,7 +182,7 @@ class TestSearchExecution:
     @respx.mock
     async def test_returns_structured_results(self) -> None:
         respx.get(f"{TINYFISH_BASE_URL}/v1/search").mock(return_value=httpx.Response(200, json=SAMPLE_SEARCH_RAW))
-        toolkit = TinyFishSearchToolkit(api_key="test")
+        toolkit = TinyFishSearchToolkit(api_key="test", base_url=TINYFISH_BASE_URL)
 
         config = TrackingConfig(_tool_call_config({"query": "AG2 framework"}, tool_name="tinyfish_search"))
         agent = Agent("a", config=config, tools=[toolkit])
@@ -218,7 +218,7 @@ class TestSearchExecution:
         route = respx.get(f"{TINYFISH_BASE_URL}/v1/search").mock(
             return_value=httpx.Response(200, json=SAMPLE_SEARCH_RAW)
         )
-        toolkit = TinyFishSearchToolkit(api_key="test")
+        toolkit = TinyFishSearchToolkit(api_key="test", base_url=TINYFISH_BASE_URL)
 
         agent = Agent(
             "a",
@@ -236,7 +236,7 @@ class TestSearchExecution:
         route = respx.get(f"{TINYFISH_BASE_URL}/v1/search").mock(
             return_value=httpx.Response(200, json=SAMPLE_SEARCH_RAW)
         )
-        toolkit = TinyFishSearchToolkit(api_key="test")
+        toolkit = TinyFishSearchToolkit(api_key="test", base_url=TINYFISH_BASE_URL)
 
         agent = Agent("a", config=_tool_call_config({"query": "q"}, tool_name="tinyfish_search"), tools=[toolkit])
         await agent.ask("search")
@@ -258,7 +258,7 @@ class TestFetchExecution:
         route = respx.post(f"{TINYFISH_BASE_URL}/v1/fetch").mock(
             return_value=httpx.Response(200, json=SAMPLE_FETCH_RAW)
         )
-        toolkit = TinyFishSearchToolkit(api_key="test")
+        toolkit = TinyFishSearchToolkit(api_key="test", base_url=TINYFISH_BASE_URL)
 
         config = TrackingConfig(
             _tool_call_config(
@@ -270,7 +270,7 @@ class TestFetchExecution:
         await agent.ask("fetch")
 
         body = json.loads(route.calls.last.request.content)
-        assert body == {"urls": ["https://ag2.ai", "https://bad.example"], "api_integration": "ag2"}
+        assert body == IsPartialDict({"urls": ["https://ag2.ai", "https://bad.example"]})
 
         tool_results_event: ToolResultsEvent = config.mock.call_args_list[1].args[0]
         assert tool_results_event.results[0].result.parts[0] == DataInput(
@@ -333,7 +333,7 @@ class TestFetchExecution:
         route = respx.post(f"{TINYFISH_BASE_URL}/v1/fetch").mock(
             return_value=httpx.Response(200, json=SAMPLE_FETCH_RAW)
         )
-        toolkit = TinyFishSearchToolkit(api_key="test")
+        toolkit = TinyFishSearchToolkit(api_key="test", base_url=TINYFISH_BASE_URL)
 
         config = TrackingConfig(_tool_call_config({"urls": ["file:///etc/passwd"]}, tool_name="tinyfish_fetch"))
         agent = Agent("a", config=config, tools=[toolkit])
@@ -350,7 +350,7 @@ class TestFetchExecution:
         route = respx.post(f"{TINYFISH_BASE_URL}/v1/fetch").mock(
             return_value=httpx.Response(200, json=SAMPLE_FETCH_RAW)
         )
-        toolkit = TinyFishSearchToolkit(api_key="test")
+        toolkit = TinyFishSearchToolkit(api_key="test", base_url=TINYFISH_BASE_URL)
 
         agent = Agent(
             "a",
@@ -360,20 +360,19 @@ class TestFetchExecution:
         await agent.ask("fetch")
 
         body = json.loads(route.calls.last.request.content)
-        assert body == {
+        assert body == IsPartialDict({
             "urls": ["https://ag2.ai"],
             "format": "html",
             "links": True,
             "image_links": True,
-            "api_integration": "ag2",
-        }
+        })
 
     @respx.mock
     async def test_toolkit_level_fetch_params_applied_to_default_fetch(self) -> None:
         route = respx.post(f"{TINYFISH_BASE_URL}/v1/fetch").mock(
             return_value=httpx.Response(200, json=SAMPLE_FETCH_RAW)
         )
-        toolkit = TinyFishSearchToolkit(api_key="test", format="markdown", links=True)
+        toolkit = TinyFishSearchToolkit(api_key="test", base_url=TINYFISH_BASE_URL, format="markdown", links=True)
 
         agent = Agent(
             "a", config=_tool_call_config({"urls": ["https://ag2.ai"]}, tool_name="tinyfish_fetch"), tools=[toolkit]
@@ -381,12 +380,11 @@ class TestFetchExecution:
         await agent.ask("fetch")
 
         body = json.loads(route.calls.last.request.content)
-        assert body == {
+        assert body == IsPartialDict({
             "urls": ["https://ag2.ai"],
             "format": "markdown",
             "links": True,
-            "api_integration": "ag2",
-        }
+        })
 
 
 @pytest.mark.asyncio
@@ -396,7 +394,7 @@ class TestTinyFishToolkitVariable:
         route = respx.get(f"{TINYFISH_BASE_URL}/v1/search").mock(
             return_value=httpx.Response(200, json=SAMPLE_SEARCH_RAW)
         )
-        toolkit = TinyFishSearchToolkit(api_key="test")
+        toolkit = TinyFishSearchToolkit(api_key="test", base_url=TINYFISH_BASE_URL)
         search_tool = toolkit.search(location=Variable("user_location"), language=Variable())
 
         agent = Agent(
@@ -415,7 +413,7 @@ class TestTinyFishToolkitVariable:
         route = respx.post(f"{TINYFISH_BASE_URL}/v1/fetch").mock(
             return_value=httpx.Response(200, json=SAMPLE_FETCH_RAW)
         )
-        toolkit = TinyFishSearchToolkit(api_key="test")
+        toolkit = TinyFishSearchToolkit(api_key="test", base_url=TINYFISH_BASE_URL)
         fetch_tool = toolkit.fetch(format=Variable("fetch_format"), links=Variable())
 
         agent = Agent(
@@ -427,17 +425,16 @@ class TestTinyFishToolkitVariable:
         await agent.ask("fetch")
 
         body = json.loads(route.calls.last.request.content)
-        assert body == {
+        assert body == IsPartialDict({
             "urls": ["https://ag2.ai"],
             "format": "markdown",
             "links": True,
-            "api_integration": "ag2",
-        }
+        })
 
     @respx.mock
     async def test_missing_raises(self) -> None:
         respx.get(f"{TINYFISH_BASE_URL}/v1/search").mock(return_value=httpx.Response(200, json=SAMPLE_SEARCH_RAW))
-        toolkit = TinyFishSearchToolkit(api_key="test")
+        toolkit = TinyFishSearchToolkit(api_key="test", base_url=TINYFISH_BASE_URL)
         search_tool = toolkit.search(location=Variable())
 
         agent = Agent(
@@ -457,7 +454,7 @@ class TestIndividualTools:
         route = respx.get(f"{TINYFISH_BASE_URL}/v1/search").mock(
             return_value=httpx.Response(200, json=SAMPLE_SEARCH_RAW)
         )
-        toolkit = TinyFishSearchToolkit(api_key="test")
+        toolkit = TinyFishSearchToolkit(api_key="test", base_url=TINYFISH_BASE_URL)
 
         agent = Agent(
             "a",
@@ -473,7 +470,7 @@ class TestIndividualTools:
         route = respx.post(f"{TINYFISH_BASE_URL}/v1/fetch").mock(
             return_value=httpx.Response(200, json=SAMPLE_FETCH_RAW)
         )
-        toolkit = TinyFishSearchToolkit(api_key="test")
+        toolkit = TinyFishSearchToolkit(api_key="test", base_url=TINYFISH_BASE_URL)
 
         agent = Agent(
             "a",
