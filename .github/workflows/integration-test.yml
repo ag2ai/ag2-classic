@@ -101,7 +101,6 @@ jobs:
           files: ./coverage.xml
           flags: integration, ${{ matrix.optional-dependencies }}, ${{ matrix.os }}, ${{ matrix.python-version }}
           fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   integration-test-check:
     if: always()

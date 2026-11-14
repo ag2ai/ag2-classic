@@ -1,8 +1,11 @@
 name: Claude Code Review
 
 on:
-  # For PRs from the same repository
-  pull_request:
+  # For PRs from the same repository.
+  # pull_request_target runs this workflow file as it is on main, so a PR cannot
+  # change what runs while ANTHROPIC_API_KEY is available. The job never checks
+  # out or runs PR code; Claude reads the change through `gh pr diff`/`gh pr view`.
+  pull_request_target:
     types:
       - opened
       - synchronize
@@ -19,9 +22,11 @@ jobs:
   claude-review:
     if: |
       github.actor != 'dependabot[bot]' &&
-      ((github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
+      ((github.event_name == 'pull_request_target' && github.event.pull_request.draft == false) ||
       github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
+    # ANTHROPIC_API_KEY lives in this environment, which only allows the main branch.
+    environment: openai1
     permissions:
       contents: read
       pull-requests: read
@@ -35,7 +40,7 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
-      - name: Check PR and checkout branch
+      - name: Check PR
         id: check-pr
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -58,16 +63,15 @@ jobs:
           HEAD_REPO=$(echo "$PR_INFO" | jq -r '.headRepository.nameWithOwner // ""')
 
           # Skip (don't fail) forked PRs on automatic triggers, but allow manual triggers
-          if [ "$EVENT_NAME" == "pull_request" ] && ([ "$IS_FORK" = "true" ] || [ "$HEAD_REPO" != "$GITHUB_REPO" ]); then
+          if [ "$EVENT_NAME" == "pull_request_target" ] && ([ "$IS_FORK" = "true" ] || [ "$HEAD_REPO" != "$GITHUB_REPO" ]); then
             echo "⏭️  Skipping review: PR #$PR_NUMBER is from a forked repository"
             echo "Forked PRs are skipped for automatic reviews. Use workflow_dispatch to manually trigger a review."
             echo "skip_review=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          echo "Checking out PR #$PR_NUMBER"
-          gh pr checkout "$PR_NUMBER"
-          echo "✅ PR branch checked out successfully"
+          # Do not check out the PR branch: Claude Code would load the PR's
+          # .claude/ settings and hooks, which can run commands with the API key.
           echo "skip_review=false" >> "$GITHUB_OUTPUT"
 
       - name: Run Claude Code Review
